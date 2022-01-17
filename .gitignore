@@ -1,4 +1,8 @@
-# Byte-compiled / optimized / DLL files
+*.out
+*.csv
+figures/
+
+*.# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class

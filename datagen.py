@@ -3,6 +3,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+import pandas as pd
+import math
+
 def parseFile(filein,nevents):
 
         with open(filein) as f:
@@ -71,6 +74,28 @@ def parseFile(filein,nevents):
 
         arr_truth = np.array(cluster_truth)
         arr_events = np.array( events )
+
+
+        #convert into pandas DF
+        df = {}
+        #truth quantities  
+        df = pd.DataFrame(arr_truth, columns = ['x-entry', 'y-entry','z-entry', 'n_x', 'n_y', 'n_z', 'number_eh_pairs'])
+        df['n_x']=df['n_x'].astype(float)
+        df['n_y']=df['n_y'].astype(float)
+        df['n_z']=df['n_z'].astype(float)
+        #added angular variables
+        df['spherR'] = df['n_x']**2 + df['n_y']**2 + df['n_z']**2
+        df['theta'] = np.arccos(df['n_z']/df['spherR'])*180/math.pi
+        df['phi'] = np.arctan2(df['n_y'],df['n_x'])*180/math.pi
+        df['cosPhi'] = np.cos(df['phi'])
+        
+        #reconstructed quantities
+        #there are 16 timeslices, each timelice is 13x21
+        df_events = pd.DataFrame(events, columns = ['0', '1', '2','3','4','5','6','7','8','9','10','11','12','13','14','15'])
+        df_events = df_events.join(df)
+        print(df_events.head())
+        df_events.to_csv("dataFrameForNN.csv")
+
         return arr_events, arr_truth
 
 def main():
