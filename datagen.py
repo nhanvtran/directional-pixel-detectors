@@ -88,19 +88,19 @@ def parseFile(filein,nevents):
         df['theta'] = np.arccos(df['n_z']/df['spherR'])*180/math.pi
         df['phi'] = np.arctan2(df['n_y'],df['n_x'])*180/math.pi
         df['cosPhi'] = np.cos(df['phi'])
-        
+        df.to_csv("labels.csv", index=False)
+
         #reconstructed quantities
         #there are 16 timeslices, each timelice is 13x21
-        df_events = pd.DataFrame(events, columns = ['0', '1', '2','3','4','5','6','7','8','9','10','11','12','13','14','15'])
-        df_events = df_events.join(df)
-        print(df_events.head())
-        df_events.to_csv("dataFrameForNN.csv")
-
+        #df_events = pd.DataFrame(events, columns = ['0', '1', '2','3','4','5','6','7','8','9','10','11','12','13','14','15'])
+        #df_events = df_events.join(df)
+        #print(df_events.head())
+        #df_events.to_csv("dataFrameForNN.csv", index=False)
         return arr_events, arr_truth
 
 def main():
 
-    arr_events, arr_truth = parseFile(filein="pixel_clusters_d00000.out", nevents=10)
+    arr_events, arr_truth = parseFile(filein="pixel_clusters_d00000.out", nevents=3)
 
     print("The shape of the event array: ", arr_events.shape)
     print("The ndim of the event array: ", arr_events.ndim)
@@ -109,6 +109,8 @@ def main():
     print("The max value in the array is: ", np.amax(arr_events))
     # print("The shape of the truth array: ", arr_truth.shape)
 
+    df2 = {}
+    df2list = []
     for i, e in enumerate(arr_events):
 
         integrated_cluster = np.sum(e,axis=0)
@@ -119,6 +121,7 @@ def main():
 
         cur_img = plt.imshow(integrated_cluster)
         cur_img.get_figure().savefig('figures/integ_ev{0:02d}.png'.format(i))
+        df2list.append(integrated_cluster)
 
         max_val = np.amax(e)
         for j,s in enumerate(e):
@@ -126,6 +129,10 @@ def main():
             cur_img = plt.imshow(s,vmin=0,vmax=max_val)
             cur_img.get_figure().savefig('figures/slices_ev{0:02d}_sl{1:02d}.png'.format(i,j))
 
+    a = np.array(df2list)
+    a.shape = -1, 21
+    df2 = pd.DataFrame(a)
+    df2.to_csv('recon.csv', index = False)
 
 if __name__ == "__main__":
     main()
