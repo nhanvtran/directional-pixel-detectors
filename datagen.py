@@ -111,6 +111,7 @@ def main():
 
     df2 = {}
     df2list = []
+
     for i, e in enumerate(arr_events):
 
         integrated_cluster = np.sum(e,axis=0)
@@ -121,7 +122,9 @@ def main():
 
         cur_img = plt.imshow(integrated_cluster)
         cur_img.get_figure().savefig('figures/integ_ev{0:02d}.png'.format(i))
-        df2list.append(integrated_cluster)
+   
+        a = integrated_cluster.flatten()
+        df2list.append(a)
 
         max_val = np.amax(e)
         for j,s in enumerate(e):
@@ -129,9 +132,7 @@ def main():
             cur_img = plt.imshow(s,vmin=0,vmax=max_val)
             cur_img.get_figure().savefig('figures/slices_ev{0:02d}_sl{1:02d}.png'.format(i,j))
 
-    a = np.array(df2list)
-    a.shape = -1, 21
-    df2 = pd.DataFrame(a)
+    df2 = pd.DataFrame(df2list)
     df2.to_csv('recon.csv', index = False)
 
 if __name__ == "__main__":
