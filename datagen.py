@@ -2,6 +2,8 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
+import math
 
 def parseFile(filein,nevents):
 
@@ -71,6 +73,23 @@ def parseFile(filein,nevents):
 
         arr_truth = np.array(cluster_truth)
         arr_events = np.array( events )
+
+
+        #convert into pandas DF
+        df = {}
+        #truth quantities - all are dumped to DF
+        df = pd.DataFrame(arr_truth, columns = ['x-entry', 'y-entry','z-entry', 'n_x', 'n_y', 'n_z', 'number_eh_pairs'])
+        df['n_x']=df['n_x'].astype(float)
+        df['n_y']=df['n_y'].astype(float)
+        df['n_z']=df['n_z'].astype(float)
+        
+        #added angular variables
+        df['spherR'] = df['n_x']**2 + df['n_y']**2 + df['n_z']**2
+        df['theta'] = np.arccos(df['n_z']/df['spherR'])*180/math.pi
+        df['phi'] = np.arctan2(df['n_y'],df['n_x'])*180/math.pi
+        df['cosPhi'] = np.cos(df['phi'])
+        df.to_csv("labels.csv", index=False)
+
         return arr_events, arr_truth
 
 def main():
@@ -84,6 +103,9 @@ def main():
     print("The max value in the array is: ", np.amax(arr_events))
     # print("The shape of the truth array: ", arr_truth.shape)
 
+    df2 = {}
+    df2list = []
+
     for i, e in enumerate(arr_events):
 
         integrated_cluster = np.sum(e,axis=0)
@@ -95,12 +117,18 @@ def main():
         cur_img = plt.imshow(integrated_cluster)
         cur_img.get_figure().savefig('figures/integ_ev{0:02d}.png'.format(i))
 
+        a = integrated_cluster.flatten()
+        df2list.append(a)
+
         max_val = np.amax(e)
         for j,s in enumerate(e):
 
             cur_img = plt.imshow(s,vmin=0,vmax=max_val)
             cur_img.get_figure().savefig('figures/slices_ev{0:02d}_sl{1:02d}.png'.format(i,j))
 
+    #df2 is a df with the reconstructed clusters
+    df2 = pd.DataFrame(df2list)
+    df2.to_csv('recon.csv', index = False)
 
 if __name__ == "__main__":
     main()
