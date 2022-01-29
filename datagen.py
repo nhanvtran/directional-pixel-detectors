@@ -84,10 +84,12 @@ def parseFile(filein,nevents):
         df['n_z']=df['n_z'].astype(float)
         
         #added angular variables
-        df['spherR'] = df['n_x']**2 + df['n_y']**2 + df['n_z']**2
-        df['theta'] = np.arccos(df['n_z']/df['spherR'])*180/math.pi
-        df['phi'] = np.arctan2(df['n_y'],df['n_x'])*180/math.pi
-        df['cosPhi'] = np.cos(df['phi'])
+        #df['spherR'] = df['n_x']**2 + df['n_y']**2 + df['n_z']**2
+        #df['theta'] = np.arccos(df['n_z']/df['spherR'])*180/math.pi
+        #df['phi'] = np.arctan2(df['n_y'],df['n_x'])*180/math.pi
+        #df['cosPhi'] = np.cos(df['phi'])
+        df['cotAlpha'] = df['n_x']/df['n_z']
+        df['cotBeta'] = df['n_y']/df['n_z']
         df.to_csv("labels.csv", index=False)
 
         return arr_events, arr_truth
