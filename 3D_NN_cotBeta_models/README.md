@@ -8,6 +8,7 @@
 ## How to run the code
 - Run datagen.py for training or testing (decide on train/test split in advance, assuming all clusters were randomly generated)
 - Create cluster train/test sets in two different directories. Each cluster has its own own folder (cluster0, cluster1, etc). Each cluster folder has 8 frames using .npy format
-- Run prepareFileList.ipynb to create a list of samples (will have one for training, one for test). Each sample has 8 frames in it. The list of samples will be used for batched input. The NN will grab samples from the sample list, instead of loading all samples into memory at once.
-- Run CNN-LSTM-april18.ipynb 
+- Run prepareFileList.ipynb to create lists of samples (will have one for training, one for test). Each sample has 8 frames in it. The lists of samples will be used for batched input. The NN will grab samples from the sample list, instead of loading all samples into memory at once.
+- Run MakeNPYFile.ipynb to make training and test .npy files which will be lists of files given to the CNN.
+- Run nn_lstm_may5.py which takes above .npy lists of files to access, and runs the model
 - Note: need to change paths for each folder for your system
