@@ -1,5 +1,4 @@
 import sys
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import math
@@ -44,7 +43,7 @@ def parseFile(filein,tag,nevents=-1):
                     
                 clusterctr += 1
                 cur_cluster = []
-                print("New cluster ",clusterctr)
+#                print("New cluster ",clusterctr)
                 continue
 
             # the line after cluster
@@ -91,15 +90,9 @@ def parseFile(filein,tag,nevents=-1):
 
 def main():
         
-#        for i in range(16301,16360):
-
-        i = int(sys.argv[1]) #16301
+        i = int(sys.argv[1])
         tag = "d"+str(i)
-        rawdir = "/eos/uscms/store/user/jennetd/smart-pixels/from-morris/raw/" 
-        arr_events, arr_truth = parseFile(filein=rawdir+"pixel_clusters_d"+str(i)+".out",tag=tag)
-
-        print(len(arr_events),len(arr_truth))
-        print(arr_truth[-1])
+        arr_events, arr_truth = parseFile(filein="pixel_clusters_d"+str(i)+".out",tag=tag)
 
         print("The shape of the event array: ", arr_events.shape)
         print("The ndim of the event array: ", arr_events.ndim)
@@ -113,22 +106,12 @@ def main():
 
         for i, e in enumerate(arr_events):
 
-                integrated_cluster = np.sum(e,axis=0)
-#                print("event number = ", i)
-#                print("event array shape = ", e.shape)
-#                print("integrated cluster shape = ", integrated_cluster.shape)
-#                print("total charge = ", np.sum(integrated_cluster))
-
-#                cur_img = plt.imshow(integrated_cluster)
-#                cur_img.get_figure().savefig('figures/integ_ev{0:02d}.png'.format(i))
+                integrated_cluster = e[-1]
 
                 a = integrated_cluster.flatten()
                 df2list.append(a)
 
                 max_val = np.amax(e)
-#                for j,s in enumerate(e):
-#                        cur_img = plt.imshow(s,vmin=0,vmax=max_val)
-#                        cur_img.get_figure().savefig('figures/slices_ev{0:02d}_sl{1:02d}.png'.format(i,j))
 
         #df2 is a df with the reconstructed clusters
         df2 = pd.DataFrame(df2list)
