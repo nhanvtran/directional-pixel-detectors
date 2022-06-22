@@ -59,7 +59,7 @@ def parseFile(filein,tag,nevents=-1):
                 continue
             if timeslice > 0 and b_getclusterinfo == False:
                 cur_row = line.strip().split()
-                cur_slice.append([10*float(item) for item in cur_row])
+                cur_slice.append([float(item) for item in cur_row])
 
         events.append(cur_cluster)
         print("Number of clusters = ", len(cluster_truth))
