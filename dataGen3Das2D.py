@@ -82,7 +82,6 @@ def parseFile(filein,tag,nevents=-1):
         df['n_z']=df['n_z'].astype(float)
         df['cotBeta'] = df['n_y']/df['n_z']
         df['cotAlpha'] = df['n_x']/df['n_z']
-        df['charge'] = df['number_eh_pairs']
         df.drop('x-entry', axis=1, inplace=True)
         df.drop('y-entry', axis=1, inplace=True)
         df.drop('n_x', axis=1, inplace=True)
