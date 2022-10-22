@@ -2,6 +2,10 @@ help:
 	@echo "INFO: make <tab> for targets"
 .PHONY: help
 
+run:
+	jupyter notebook
+.PHONY: run
+
 clean:
 	@echo "INFO: Use ultraclean instead"
 .PHONY: clean

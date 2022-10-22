@@ -31,7 +31,7 @@
 
 //hls-fpga-machine-learning insert bram
 
-#define CHECKPOINT 1
+#define CHECKPOINT 10000
 
 namespace nnet {
     bool trace_enabled = true;
@@ -39,10 +39,10 @@ namespace nnet {
     size_t trace_type_size = sizeof(double);
 }
 
-template <class T, int N>
+template <class T, int N, int MIN>
 unsigned argmax(T args[N]) {
   unsigned max_idx = 0;
-  T max = -31;
+  T max = MIN;
 
   for (int i = N-1; i >= 0; i--) {
     if(args[i] > max) {
@@ -128,15 +128,14 @@ int main(int argc, char **argv)
       e++;
 
       unsigned expected_prediction = argmax_vector<N_LAYER_6>(pr);
-      unsigned model_prediction = argmax<result_t, N_LAYER_6>(layer8_out);
-      std::cout << "INFO: Expected prediction (argmax): " << expected_prediction << std::endl;
-      std::cout << "INFO: Model prediction (argmax): " << model_prediction << std::endl;
+      unsigned model_prediction = argmax<result_t, N_LAYER_6, -31>(layer8_out);
+      //std::cout << "INFO: Expected prediction (argmax): " << expected_prediction << std::endl;
+      //std::cout << "INFO: Model prediction (argmax): " << model_prediction << std::endl;
       if (model_prediction != expected_prediction) errors++;
       outputs++;
-      std::cout << "INFO:" << std::endl;
+      //std::cout << "INFO:" << std::endl;
       //hls-fpga-machine-learning insert tb-output
       nnet::print_result<result_t, N_LAYER_6>(layer8_out, fout);
-      if (e > 5) break;
     }
     float error_rate = float(errors) * 100 / outputs;
     std::cout << "INFO: Total errors: " << errors << " (" << outputs << ")" << std::endl;

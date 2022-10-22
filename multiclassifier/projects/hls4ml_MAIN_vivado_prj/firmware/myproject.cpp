@@ -51,10 +51,10 @@ void myproject(
     // ****************************************
 
     //hls-fpga-machine-learning insert layers
-    std::cout << "INFO: input: ";
-    for (unsigned i = 0; i < N_LAYER_2; i++)
-        std::cout << input_1[i] << " ";
-    std::cout << std::endl;
+    //std::cout << "INFO: input: ";
+    //for (unsigned i = 0; i < N_LAYER_2; i++)
+    //    std::cout << input_1[i] << " ";
+    //std::cout << std::endl;
 
     layer2_t layer2_out[N_LAYER_2];
     #pragma HLS ARRAY_PARTITION variable=layer2_out complete dim=0
@@ -82,9 +82,9 @@ void myproject(
 
     nnet::softmax<layer7_t, result_t, softmax_config8>(layer7_out, layer8_out); // softmax
 
-    std::cout << "INFO: output: ";
-    for (unsigned i = 0; i < N_LAYER_6; i++)
-    	std::cout << layer8_out[i] << " ";
-    std::cout << std::endl;
+    //std::cout << "INFO: output: ";
+    //for (unsigned i = 0; i < N_LAYER_6; i++)
+    //	std::cout << layer8_out[i] << " ";
+    //std::cout << std::endl;
 
 }
