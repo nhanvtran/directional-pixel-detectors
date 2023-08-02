@@ -6,6 +6,10 @@ jupyterlab:
 	jupyter-lab
 .PHONY: jupyterlab
 
+jupyterlab-server:
+	jupyter-lab --no-browser --port=8080 --ip=0.0.0.0
+.PHONY: jupyterlab-server
+
 clean:
 	@echo "INFO: Use ultraclean instead"
 .PHONY: clean
